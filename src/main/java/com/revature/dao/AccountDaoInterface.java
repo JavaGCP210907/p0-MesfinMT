@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.revature.models.Account;
 
+//Interfaces used to implement account related operations.
 public interface AccountDaoInterface {
 
 	public List<Account> getAccount(); //returns a List of all Accounts (select *)

@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+//This Class is where we manage and establish postgres database connection
 public class ConnectionUtil {
 
-	
 	public static Connection getConnection() throws SQLException {
 		
 		try {
@@ -16,7 +16,6 @@ public class ConnectionUtil {
 			System.out.println("problem occurred locating driver");
 		}
 		
-
 		String url = System.getenv("URL");
 		String username = System.getenv("USERNAME");
 		String password = System.getenv("PASSWORD");

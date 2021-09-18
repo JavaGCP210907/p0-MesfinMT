@@ -1,5 +1,6 @@
 package com.revature.models;
 
+//Represents the transactions table in the database
 public class Transaction {
 
 	private int transaction_id;

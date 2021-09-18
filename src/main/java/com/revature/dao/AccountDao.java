@@ -8,11 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.models.Account;
 import com.revature.models.Customer;
+import com.revature.models.Menu;
 import com.revature.utils.ConnectionUtil;
 
+//Implements AccountDaoInterface abstract methods.
 public class AccountDao implements AccountDaoInterface {
+
+	Logger log = LogManager.getLogger(Menu.class); //Logger object so that we can implement Logging
 
 	@Override
 	public List<Account> getAccount() {
@@ -29,7 +36,7 @@ public class AccountDao implements AccountDaoInterface {
 			
 			while(rs.next()) { 
 				
-				Account e = new Account(
+				Account eaccount = new Account(
 						rs.getInt("account_id"),
 						rs.getDouble("balance"),
 						rs.getString("opendate"),
@@ -37,7 +44,7 @@ public class AccountDao implements AccountDaoInterface {
 						rs.getInt("customer_id")
 						);
 				
-				accountList.add(e);
+				accountList.add(eaccount);
 			}
 			
 			return accountList;
@@ -64,7 +71,7 @@ public class AccountDao implements AccountDaoInterface {
 			rs = ps.executeQuery();
 			List<Account> accountList = new ArrayList<>();
 			while(rs.next()) { 
-				Account c = new Account(
+				Account eaccount = new Account(
 						rs.getInt("account_id"),
 						rs.getDouble("balance"),
 						rs.getString("opendate"),
@@ -72,7 +79,7 @@ public class AccountDao implements AccountDaoInterface {
 						rs.getInt("customer_id")
 						);
 			
-				accountList.add(c); 
+				accountList.add(eaccount); 
 			}
 			
 			return accountList;
@@ -97,7 +104,7 @@ public class AccountDao implements AccountDaoInterface {
 			rs = ps.executeQuery();
 			List<Account> accountList = new ArrayList<>();
 			while(rs.next()) { 
-				Account c = new Account(
+				Account eaccount = new Account(
 					rs.getInt("account_id"),
 					rs.getDouble("balance"),
 					rs.getString("opendate"),
@@ -105,7 +112,7 @@ public class AccountDao implements AccountDaoInterface {
 					rs.getInt("customer_id")
 					);
 			
-				accountList.add(c); 
+				accountList.add(eaccount); 
 			}
 			
 			return accountList;
@@ -119,6 +126,7 @@ public class AccountDao implements AccountDaoInterface {
 
 	@Override
 	public void addAccount(Account account) {
+		int counter = 0;
 	
 		try(Connection conn = ConnectionUtil.getConnection()){
 
@@ -130,19 +138,27 @@ public class AccountDao implements AccountDaoInterface {
 			ps.setInt(1, account.getAccounttype_id());
 			ps.setInt(2, account.getCustomer_id());
 			
-			ps.executeUpdate(); 
+			counter=ps.executeUpdate(); 
 			
-			System.out.println("A new account created with customer ID: " + account.getCustomer_id());
 			
 		} catch (SQLException e) {
-			System.out.println("add customer failed :(");
-			e.printStackTrace();
+			System.out.println("Add account failed :(");
+		}
+		if (counter == 0) {
+			System.out.println("Creat account with account ID "+ account.getAccounttype_id()+" failed: " );
+		}
+		else
+		{
+			System.out.println("A new account created with customer ID: " + account.getCustomer_id());
+			log.warn("USER ADDED ACCOUNT ID: " + account.getAccounttype_id());
 		}
 		
 	}
 		
 	@Override
 	public void removeAccount(int id) {
+
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
@@ -151,19 +167,29 @@ public class AccountDao implements AccountDaoInterface {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setInt(1, id);
-			ps.executeUpdate();
+			counter=ps.executeUpdate();
 			
-			System.out.println("Account ID: " + id+" is deleted.");
 			
 		} catch (SQLException e) {
 			System.out.println("you can't remove Account ID "+id);
 			e.printStackTrace();
 		}
+		if (counter == 0) {
+			System.out.println("Delete Account failed: " + id);
+		}
+		else 
+		{
+		System.out.println("Account ID: " + id+" is deleted.");
+		log.warn("USER DELETED Account ID: " + id);
+		}
+		
 		
 	}
 
 	@Override
 	public void updateAccount(int accountid, int accounttypeid) {
+
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
@@ -174,14 +200,21 @@ public class AccountDao implements AccountDaoInterface {
 			ps.setInt(1, accounttypeid);
 			ps.setInt(2, accountid);
 			
-			ps.executeUpdate();
-			
-			System.out.println("Account ID "+accountid + " Account Type is successfully updated to: " + accounttypeid);
+			counter=ps.executeUpdate();
 			
 		} catch (SQLException e) {
-			System.out.println("You can't update customer : "+accountid);
+			System.out.println("You can't update Account : "+accountid);
 			e.printStackTrace();
 		}
+		if (counter == 0) {
+			System.out.println("Update Account failed: " + accountid);
+		}
+		else 
+		{
+			System.out.println("Account ID "+accountid + " changed to: " + accounttypeid);
+			log.warn("USER UPDATED ACCOUNT TYPE ID TO : " + accounttypeid+ " FOR ACCOUNT ID: "+accountid);
+		}
+
 	}
 
 }

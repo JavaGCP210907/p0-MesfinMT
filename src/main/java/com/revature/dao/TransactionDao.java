@@ -8,11 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.models.Account;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.revature.models.Menu;
 import com.revature.models.Transaction;
 import com.revature.utils.ConnectionUtil;
 
+//Implements TransactionDaoInterface abstract methods.
 public class TransactionDao implements TransactionDaoInterface {
+
+	Logger log = LogManager.getLogger(Menu.class); //Logger object so that we can implement Logging
 
 	@Override
 	public List<Transaction> getTransaction() {
@@ -30,7 +36,7 @@ public class TransactionDao implements TransactionDaoInterface {
 			
 			while(rs.next()) { 
 				
-				Transaction e = new Transaction(
+				Transaction transaction = new Transaction(
 						rs.getInt("transaction_id"),
 						rs.getString("postdate"),
 						rs.getDouble("amount"),
@@ -38,7 +44,7 @@ public class TransactionDao implements TransactionDaoInterface {
 						rs.getInt("account_id")
 						);
 				
-				transactionList.add(e);
+				transactionList.add(transaction);
 			}
 			
 			return transactionList;
@@ -64,7 +70,7 @@ public class TransactionDao implements TransactionDaoInterface {
 			rs = ps.executeQuery();
 			List<Transaction> transactionList = new ArrayList<>();
 			while(rs.next()) { 
-				Transaction c = new Transaction(
+				Transaction transaction = new Transaction(
 					rs.getInt("transaction_id"),
 					rs.getString("postdate"),
 					rs.getDouble("amount"),
@@ -72,7 +78,7 @@ public class TransactionDao implements TransactionDaoInterface {
 					rs.getInt("account_id")
 					);
 			
-				transactionList.add(c); 
+				transactionList.add(transaction); 
 			}
 			
 			return transactionList;
@@ -97,7 +103,7 @@ public class TransactionDao implements TransactionDaoInterface {
 			rs = ps.executeQuery();
 			List<Transaction> transactionList = new ArrayList<>();
 			while(rs.next()) { 
-				Transaction c = new Transaction(
+				Transaction transaction = new Transaction(
 					rs.getInt("transaction_id"),
 					rs.getString("postdate"),
 					rs.getDouble("amount"),
@@ -105,7 +111,7 @@ public class TransactionDao implements TransactionDaoInterface {
 					rs.getInt("account_id")
 					);
 			
-				transactionList.add(c); 
+				transactionList.add(transaction); 
 			}
 			
 			return transactionList;
@@ -120,6 +126,7 @@ public class TransactionDao implements TransactionDaoInterface {
 
 	@Override
 	public void addTransaction(Transaction transaction) {
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 
@@ -132,19 +139,26 @@ public class TransactionDao implements TransactionDaoInterface {
 			ps.setString(2, transaction.getDescription());
 			ps.setInt(3, transaction.getAccount_id());
 			
-			ps.executeUpdate(); 
+			counter=ps.executeUpdate(); 
 			
-			System.out.println("A new Transaction created for Account ID: " + transaction.getAccount_id());
 			
 		} catch (SQLException e) {
 			System.out.println("Add transaction failed :(");
-			e.printStackTrace();
 		}
-		
+		if (counter == 0) {
+			System.out.println("Add Transaction ID "+ transaction.getAccount_id()+" failed: " );
+		}
+		else
+		{
+			System.out.println("A new Transaction created for Account ID: " + transaction.getAccount_id());
+			log.warn("USER POSTED A TRANSACTION ON ACCOUNT ID: " + transaction.getAccount_id());
+		}
+	
 	}
 	
 	@Override
 	public void removeTransaction(int id) {
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
@@ -153,20 +167,29 @@ public class TransactionDao implements TransactionDaoInterface {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setInt(1, id);
-			ps.executeUpdate();
+			counter=ps.executeUpdate();
 			
-			System.out.println("Transaction ID: " + id+" is deleted.");
 			
 		} catch (SQLException e) {
-			System.out.println("you can't remove Transaction ID "+id);
-			e.printStackTrace();
+			System.out.println("Delete Transaction "+id+" failed.");
 		}
+	
+	if (counter == 0) {
+		System.out.println("Delete Transaction "+id+" failed.");
+	}
+	else 
+	{
+		System.out.println("Transaction ID: " + id+" is deleted.");
+	log.warn("USER DELETED TRANSACTION ID: " + id);
+	}
 		
 	}
 
 		
 	@Override
 	public void updateTransaction(int id,String desc) {
+
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
@@ -177,14 +200,21 @@ public class TransactionDao implements TransactionDaoInterface {
 			ps.setString(1, desc);
 			ps.setInt(2, id);
 			
-			ps.executeUpdate();
+			counter=ps.executeUpdate();
 			
-			System.out.println("Transaction ID "+id + " Reference is successfully updated to: " + desc);
 			
 		} catch (SQLException e) {
-			System.out.println("You can't update customer : "+id);
-			e.printStackTrace();
+			System.out.println("You can't update Transaction ID : "+id+" Reference.");
 		}
+		if (counter == 0) {
+			System.out.println("Update Transaction ID" + id+" failed.");
+		}
+		else 
+		{
+			System.out.println("Transaction ID "+id + " reference is changed to: " + desc);
+			log.warn("USER UPDATED TRANSACTION REFERENCE TO : " + desc+ " FOR transaction ID: "+id);
+		}
+
 	}
 
 }

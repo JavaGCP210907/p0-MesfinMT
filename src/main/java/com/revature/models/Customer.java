@@ -1,5 +1,6 @@
 package com.revature.models;
 
+//Represents the customers table in the database
 public class Customer {
 	//fields for the customer class - must match those in your database
 	private int customer_id;

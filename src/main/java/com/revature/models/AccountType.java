@@ -1,5 +1,6 @@
 package com.revature.models;
 
+//Represents the accounttypes table in the database
 public class AccountType {
 	
 	private int accounttype_id;

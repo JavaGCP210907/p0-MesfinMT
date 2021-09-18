@@ -8,10 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.models.Customer;
+import com.revature.models.Menu;
 import com.revature.utils.ConnectionUtil;
 
+//Implements CustomerDaoInterface abstract methods.
 public class CustomerDao implements CustomerDaoInterface {
+
+	Logger log = LogManager.getLogger(Menu.class); //Logger object so that we can implement Logging
 
 	@Override
 	public List<Customer> getCustomer() {
@@ -29,7 +36,7 @@ public class CustomerDao implements CustomerDaoInterface {
 			
 			while(rs.next()) { 
 				
-				Customer e = new Customer(
+				Customer customer = new Customer(
 						rs.getInt("customer_id"),
 						rs.getString("name"),
 						rs.getString("address"),
@@ -38,7 +45,7 @@ public class CustomerDao implements CustomerDaoInterface {
 						rs.getInt("zipcode")
 						);
 				
-				customerList.add(e);
+				customerList.add(customer);
 			}
 			
 			return customerList;
@@ -65,7 +72,7 @@ public class CustomerDao implements CustomerDaoInterface {
 			rs = ps.executeQuery();
 			List<Customer> customerList = new ArrayList<>();
 			while(rs.next()) { 
-				Customer c = new Customer(
+				Customer customer = new Customer(
 					rs.getInt("customer_id"),
 					rs.getString("name"),
 					rs.getString("address"),
@@ -74,7 +81,7 @@ public class CustomerDao implements CustomerDaoInterface {
 					rs.getInt("zipcode")
 					);
 			
-				customerList.add(c); 
+				customerList.add(customer); 
 			}
 			
 			return customerList;
@@ -100,7 +107,7 @@ public class CustomerDao implements CustomerDaoInterface {
 			rs = ps.executeQuery();
 			List<Customer> customerList = new ArrayList<>();
 			while(rs.next()) { 
-				Customer c = new Customer(
+				Customer customer = new Customer(
 					rs.getInt("customer_id"),
 					rs.getString("name"),
 					rs.getString("address"),
@@ -109,20 +116,21 @@ public class CustomerDao implements CustomerDaoInterface {
 					rs.getInt("zipcode")
 					);
 			
-				customerList.add(c); 
+				customerList.add(customer); 
 			}
 			
 			return customerList;
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace();
 		}
 		return null;
 	}
 	
 	@Override
 	public void addCustomer(Customer customer) {
+
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 
@@ -137,20 +145,29 @@ public class CustomerDao implements CustomerDaoInterface {
 			ps.setString(4, customer.getState());
 			ps.setInt(5, customer.getZipcode());
 			
-			ps.executeUpdate(); 
-			
-			System.out.println("customer " + customer.getName() + " created.");
+			counter=ps.executeUpdate(); 
 			
 		} catch (SQLException e) {
-			System.out.println("add customer failed :(");
+			System.out.println("Add customer failed :(");
 			e.printStackTrace();
 		}
 		
+		if (counter == 0) {
+			System.out.println("Add Customer "+ customer.getName()+" failed: " );
+		}
+		else
+		{
+			System.out.println("Customer "+customer.getName() + " successfully added.");
+			log.warn("USER ADDED CUSTOMER WITH NAME: " + customer.getName());
+		}
 	}
 	
 
 	@Override
-	public void removeCustomer(int id) {
+	public void removeCustomer(int id)  {
+
+		int counter = 0;
+
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
 			String sql = "delete from customers where customer_id = ?";
@@ -158,19 +175,30 @@ public class CustomerDao implements CustomerDaoInterface {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setInt(1, id);
-			ps.executeUpdate();
 			
-			System.out.println("Customer ID: " + id+" is deleted.");
+			counter=ps.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("you can't remove Customer ID "+id);
 			e.printStackTrace();
 		}
 		
-	}
+		if (counter == 0) {
+			System.out.println("Delete Customer failed: " + id);
+		}
+		else 
+		{
+		System.out.println("Customer ID "+id + " successfully deleted");
+		log.warn("USER DELETED CUSTOMER ID: " + id);
+		}
+}
+	
+	
 	
 	@Override
 	public void updateCustomer( int id,String address) {
+
+		int counter = 0;
 
 		try(Connection conn = ConnectionUtil.getConnection()){
 			
@@ -181,13 +209,20 @@ public class CustomerDao implements CustomerDaoInterface {
 			ps.setString(1, address);
 			ps.setInt(2, id);
 			
-			ps.executeUpdate();
+			counter=ps.executeUpdate();
 			
-			System.out.println("Customer ID "+id + " Address is successfully updated to: " + address);
 			
 		} catch (SQLException e) {
 			System.out.println("You can't update customer : "+id);
 			e.printStackTrace();
+		}
+		if (counter == 0) {
+			System.out.println("Update Customer failed: " + id);
+		}
+		else 
+		{
+			System.out.println("Customer ID "+id + " Address is changed to: " + address);
+			log.warn("USER UPDATED CUSTOMER ADDRESS TO : " + address+ " FOR CUSTOMER ID: "+id);
 		}
 	}
 }

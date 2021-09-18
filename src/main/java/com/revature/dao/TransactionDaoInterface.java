@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.revature.models.Transaction;
 
+//Interfaces used to implement transaction related operations.
 public interface TransactionDaoInterface {
 
 	public List<Transaction> getTransaction(); //returns a List of all Transaction (select *)

@@ -1,6 +1,5 @@
 package com.revature.models;
 
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,6 +11,8 @@ import com.revature.dao.AccountTypeDao;
 import com.revature.dao.CustomerDao;
 import com.revature.dao.TransactionDao;
 
+//The Menu class allow us to loop through the different menu of the banking application using While and nested while loop
+//and switch and nested switch flow controls
 public class Menu {
 
 	CustomerDao cDao = new CustomerDao(); //so we can use the CustomerDao methods
@@ -20,7 +21,7 @@ public class Menu {
 	TransactionDao tDao = new TransactionDao(); //so we can use the TransactionDao methods
 	Logger log = LogManager.getLogger(Menu.class); //Logger object so that we can implement Logging
 	
-	public void displayMenu() {
+	public void displayMenu()  {
 		
 		boolean displayMenu = true; 
 		Scanner scan = new Scanner(System.in);
@@ -30,7 +31,7 @@ public class Menu {
 		System.out.println("*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*");
 		
 		
-		while(displayMenu) {
+		while(displayMenu) {//Main while loops starts here
 			
 			System.out.println("---------------------------");
 			System.out.println("----MAIN MENU OPTIONS------");
@@ -45,11 +46,11 @@ public class Menu {
 			
 			String input = scan.nextLine();
 			
-			switch(input) {
+			switch(input) {//Main switch starts here
 			
 			case "01": {
 				boolean displayMenu2 = true; 
-				while(displayMenu2) {
+				while(displayMenu2) {//Nested while loops starts here
 					System.out.println("----------------------------------");
 					System.out.println("----ACCOUNT TYPE MENU OPTIONS------");
 					System.out.println("----------------------------------");
@@ -61,7 +62,7 @@ public class Menu {
 
 				String inputc = scan.nextLine();
 				
-				switch(inputc) {
+				switch(inputc) {//Nested switch starts here
 				
 				case "05": {
 
@@ -75,42 +76,69 @@ public class Menu {
 				}
 				
 				case "06": {
-					System.out.println("Enter Account type");
+					System.out.println("Please enter Account type");
 					String type = scan.nextLine();
 					
-					System.out.println("Enter Interest Rate");
-					double rate = scan.nextDouble();
+					//Validate the Interest Rate input. It should be positive number.
+					double rate;
+				       do {
+				            System.out.print("Please enter Interest Rate: ");
+				            while (!scan.hasNextDouble()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            rate = scan.nextDouble();
+				        } while (rate < 0);
 					scan.nextLine();
 					
 					AccountType actyp = new AccountType(type, rate);
-					
+				
 					atDao.addAccountType(actyp);
-					log.info("USER ADDED NEW ACCOUNT TYPE: "+type);
 					break;
 				}
 				
 				case "07": {
-					System.out.println("Enter Account Type ID to change");
-					int id = scan.nextInt();
-					
-					System.out.println("Enter a new Rate for this Account Type");
-					Double rateInput = scan.nextDouble();
+					int id;
+				       do {
+				            System.out.print("Please enter Account Type ID to change: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            id = scan.nextInt();
+				        } while (id < 0);
 					scan.nextLine();
 					
+					//Validate the Interest Rate input. It should be positive number.
+					double rateInput;
+				       do {
+				            System.out.print("Please enter a new Rate for the Account Type: ");
+				            while (!scan.hasNextDouble()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            rateInput = scan.nextDouble();
+				        } while (rateInput < 0);
+					scan.nextLine();
 					atDao.updateInterestRate(id, rateInput);
-					log.info("USER UPDATED THE INTEREST RATE OF ACCOUNT TYPE: "+id+" TO "+rateInput);
+
 					break;
 				}
 
 				case "08": {
-					System.out.println("Enter the id of the Account Type to delete");
-					
-					int id = scan.nextInt();
+					int id;
+				       do {
+				            System.out.print("Please enter the id of the Account Type to be deleted: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            id = scan.nextInt();
+				        } while (id < 0);
 					scan.nextLine();
 					
 					atDao.removeAccountType(id);
 					
-					log.warn("USER DELETED ACCOUNT TYPE " + id);
 					
 					break;
 				}
@@ -126,15 +154,15 @@ public class Menu {
 					break;
 				}
 				
-				} //End Nested switch statement
-				} //End nested while
+				} //Nested switch ends here
+				} //Nested while ends here
 
 				break;
 			}
 			
 			case "02": {
-				boolean displayMenu3 = true; 
-				while(displayMenu3) {
+				boolean displayMenu2 = true; 
+				while(displayMenu2) {//Nested while loops starts here
 					System.out.println("----------------------------------");
 					System.out.println("-------CUSTOMER MENU OPTIONS------");
 					System.out.println("----------------------------------");
@@ -148,7 +176,7 @@ public class Menu {
 
 				String input3 = scan.nextLine();
 				
-				switch(input3) {
+				switch(input3) {//Nested switch starts here
 				
 				case "09": {
 					List<Customer> customer = cDao.getCustomer();
@@ -162,15 +190,23 @@ public class Menu {
 				
 			
 				case "10": {
-					System.out.println("Enter customer id to search for?");
-					int idInput = scan.nextInt(); 
-					scan.nextLine(); 
+					int idInput;
+				       do {
+				            System.out.print("Please enter customer id to search for: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            idInput = scan.nextInt();
+				        } while (idInput < 0);
+						scan.nextLine();
 					List<Customer> customers = cDao.getCustomerById(idInput);
 					
 					for(Customer cus : customers) {
 						System.out.println(cus);
 					}
-					
+					System.out.println("There is no customer with the specified ID"); 
+				
 					break;
 				}
 						
@@ -195,62 +231,79 @@ public class Menu {
 					String city = scan.nextLine();
 					System.out.println("Enter State");
 					String state = scan.nextLine();
-					System.out.println("Enter Zipcode");
-					int zipcode = scan.nextInt();
-					
-					scan.nextLine();
+					//Validate the zipcode input. It should be positive number.
+					int zipcode;
+				       do {
+				            System.out.print("Please enter Zipcode to change: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            zipcode = scan.nextInt();
+				        } while (zipcode < 0);
 					
 					Customer cus = new Customer(name, address,city,state,zipcode);
 					
 					cDao.addCustomer(cus);
-					log.warn("USER ADDED CUSTOMER WITH NAME: " + name);
 					break;
 				}
 				case "13": {
-					System.out.println("Enter Customer ID to change");
-					int id = scan.nextInt();
-					scan.nextLine();
-					
-					System.out.println("Enter the new customer Address");
+					//Validate the customer number input. It should be positive number.
+					int number;
+				       do {
+				            System.out.print("Please enter Customer ID to change: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            number = scan.nextInt();
+				        } while (number < 0);
+						scan.nextLine();
+						
+				     System.out.println("Please enter the new customer Address");
 					String address = scan.nextLine();
-					
-					cDao.updateCustomer(id,address);
-					log.warn("USER UPDATED CUSTOMER ADDRESS TO : " + address+ " FOR CUSTOMER ID: "+id);
+					cDao.updateCustomer(number,address);
 					break;
 				}
 				case "14": {
-					System.out.println("Enter the id of the Customer to be delete");
-					
-					int id = scan.nextInt();
+					//Validate the customer number input. It should be positive number.
+					int number;
+				       do {
+				            System.out.print("Please enter Customer ID to delete: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            number = scan.nextInt();
+				        } while (number < 0);
 					scan.nextLine();
 					
-					cDao.removeCustomer(id);
+					cDao.removeCustomer(number);
 					
-					log.warn("USER DELETED CUSTOMER ID: " + id);
 					
 					break;
 				}
 
 				case "0": {
-					displayMenu3 = false; 
+					displayMenu2 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
 				}
 				
 				default: {
-					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 09, 10, 11, 12, 13, 14 OR 1. TRY AGAIN.");
+					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 09, 10, 11, 12, 13, 14 OR 0. TRY AGAIN.");
 					break;
 				}
 				
-				} //switch statement ends here
-				}//2nd While
+				} //Nested switch ends here
+				} //Nested while ends here
 
 				break; 
 			}
 						
 			case "03": {
-				boolean displayMenu3 = true; 
-				while(displayMenu3) {
+				boolean displayMenu2 = true; 
+				while(displayMenu2) {
 					System.out.println("----------------------------------");
 					System.out.println("-------ACCOUNTS MENU OPTIONS------");
 					System.out.println("----------------------------------");
@@ -277,14 +330,22 @@ public class Menu {
 				}
 				
 				case "16": {
-					System.out.println("Enter account id to search for?");
-					int idInput = scan.nextInt(); 
-					scan.nextLine(); 
+					int idInput;
+				       do {
+				            System.out.print("Please enter account id to search for: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            idInput = scan.nextInt();
+				        } while (idInput < 0);
+						scan.nextLine();
 					List<Account> accounts = aDao.getAccountById(idInput);
 					
 					for(Account acc : accounts) {
 						System.out.println(acc);
 					}
+					System.out.println("There is no account with the specified ID"); 
 					
 					break;
 				}
@@ -302,60 +363,90 @@ public class Menu {
 				}
 				case "18": {
 
-					System.out.println("Enter Account Type ID");
-					int accid = scan.nextInt();
+					int accid;
+				       do {
+				            System.out.print("Please enter Account TYPE ID: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            accid = scan.nextInt();
+				        } while (accid < 0);
+					scan.nextLine();
 					
-					System.out.println("Enter Customer ID");
-					int cusid = scan.nextInt();
-					
+					int cusid;
+				       do {
+				            System.out.print("Please enter Customer ID: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            cusid = scan.nextInt();
+				        } while (cusid < 0);
 					scan.nextLine();
 					
 					Account acc = new Account(accid,cusid);
 					
 					aDao.addAccount(acc);
-					log.warn("USER ADDED ACCOUNT ID: " + accid);
 					break;
 				}
 				case "19": {
-					System.out.println("Enter Account ID to change");
-					int accountid = scan.nextInt();
+					int accountid;
+				       do {
+				            System.out.print("Please enter Account ID to change: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            accountid = scan.nextInt();
+				        } while (accountid < 0);
 					scan.nextLine();
 					
-					System.out.println("Enter the new Account Type ID");
-					int accounttypeid = scan.nextInt();
-					scan.nextLine();
+					int accounttypeid;
+				       do {
+				            System.out.print("Please enter the new Account Type ID: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            accounttypeid = scan.nextInt();
+				        } while (accounttypeid < 0);
+						scan.nextLine();
 					
 					aDao.updateAccount(accountid,accounttypeid);
-					log.warn("USER UPDATED ACCOUNT TYPE ID TO : " + accounttypeid+ " FOR ACCOUNT ID: "+accountid);
 					break;
 				}
 				case "20": {
 
-					System.out.println("Enter the the account ID to be delete");
-					
-					int id = scan.nextInt();
-					scan.nextLine();
+					int id;
+				       do {
+				            System.out.print("Please enter account ID to be delete: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            id = scan.nextInt();
+				        } while (id < 0);
+						scan.nextLine();
 					
 					aDao.removeAccount(id);
-					
-					log.warn("USER DELETED ACCOUNT ID: " + id);
 					
 					break;
 				}
 
 				case "0": {
-					displayMenu3 = false; 
+					displayMenu2 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
 				}
 				
 				default: {
-					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 15, 16, 17, 18, 19, 20 OR 1. TRY AGAIN.");
+					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 15, 16, 17, 18, 19, 20 OR 0. TRY AGAIN.");
 					break;
 				}
 				
-				} //switch statement ends here
-				}//2nd While
+				} //Nested switch ends here
+				} //Nested while ends here
 
 				break; 
 			}
@@ -389,77 +480,115 @@ public class Menu {
 				}
 				
 				case "22": {
-
-					System.out.println("Enter transaction id to search for?");
-					int idInput = scan.nextInt(); 
-					scan.nextLine(); 
+					int idInput;
+				       do {
+				            System.out.print("Please enter transaction id to search for: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            idInput = scan.nextInt();
+				        } while (idInput < 0);
+						scan.nextLine();
 					List<Transaction> transaction = tDao.getTransactionByTransactionId(idInput);
 					
 					for(Transaction trn : transaction) {
 						System.out.println(trn);
 					}
+					System.out.println("There is no transaction with the specified transaction ID"); 
 					
 					break;
 				}
 
 					
 				case "23": {
-
-					System.out.println("Enter account id to search for transactions?");
-					int idInput = scan.nextInt(); 
-					scan.nextLine(); 
+					int idInput;
+				       do {
+				            System.out.print("Please enter account id to search for: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            idInput = scan.nextInt();
+				        } while (idInput < 0);
+						scan.nextLine();
 					List<Transaction> transaction = tDao.getTransactionByAccountId(idInput);
 					
 					for(Transaction trn : transaction) {
 						System.out.println(trn);
 					}
+					System.out.println("There is no transaction with the specified account ID"); 
 					
 					break;
 				}
 
 				case "24": {
 
-					System.out.println("Enter Account ID");
-					int accid = scan.nextInt();
+					int accid;
+				       do {
+				            System.out.print("Please enter account ID: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            accid = scan.nextInt();
+				        } while (accid<0);
+						scan.nextLine();
 					
-					System.out.println("Enter the amount");
-					double amount = scan.nextDouble();
+					double amount;
+				       do {
+				            System.out.print("Please enter amount: ");
+				            while (!scan.hasNextDouble()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            amount = scan.nextDouble();
+				        } while (amount < 0);
+					scan.nextLine();
 					
 					System.out.println("Enter the Description/Reference");
 					String desc = scan.nextLine();
-					scan.nextLine();
 					
 					Transaction trn = new Transaction(amount,desc,accid);
 					
 					tDao.addTransaction(trn);
-					log.warn("USER POSTED A TRANSACTION ON ACCOUNT ID: " + accid);
 					break;
 				}
 
 				case "25": {
 
-					System.out.println("Enter Transaction ID to change");
-					int id = scan.nextInt();
-					scan.nextLine();
+					int id;
+				       do {
+				            System.out.print("Please enter Transaction ID to change: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            id = scan.nextInt();
+				        } while (id<0);
+						scan.nextLine();
 					
 					System.out.println("Enter the new Transaction Reference");
 					String desc = scan.nextLine();
 					
 					tDao.updateTransaction(id,desc);
-					log.warn("USER UPDATED TRANSACTION REFERENCE TO : " + desc+ " FOR transaction ID: "+id);
 					break;
 				}
 
 				case "26": {
 
-					System.out.println("Enter the the transaction ID to be delete");
-					
-					int id = scan.nextInt();
-					scan.nextLine();
+					int id;
+				       do {
+				            System.out.print("Please enter Transaction ID to delete: ");
+				            while (!scan.hasNextInt()) {
+				                String inputx = scan.next();
+				                System.out.printf("\"%s\" is not a valid number.\n", inputx);
+				            }
+				            id = scan.nextInt();
+				        } while (id<0);
 					
 					tDao.removeTransaction(id);
 					
-					log.warn("USER DELETED TRANSACTION ID: " + id);
 					
 					break;
 				}
@@ -473,12 +602,12 @@ public class Menu {
 				}
 				
 				default: {
-					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 21, 22, 23, 24, 25, 26 OR 1. TRY AGAIN.");
+					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 21, 22, 23, 24, 25, 26 OR 0. TRY AGAIN.");
 					break;
 				}
 				
-				} //switch statement ends here
-				}//2nd While
+				} //Nested switch ends here
+				} //Nested while ends here
 
 				break; 
 			}
