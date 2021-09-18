@@ -59,7 +59,7 @@ public class CustomerDao implements CustomerDaoInterface {
 	}
 
 	@Override
-	public List<Customer> getCustomerById(int id) {
+	public Customer getCustomerById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

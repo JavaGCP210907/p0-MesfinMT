@@ -13,7 +13,7 @@ public interface CustomerDaoInterface {
 	
 	public List<Customer> getCustomerByName(String name); //this will get customer with a certain name (select where)
 	
-	public List<Customer> getCustomerById(int id); //return a customer given their id
+	public Customer getCustomerById(int id); //return a customer given their id
 	
 	public void addCustomer(Customer customer); //this will add a customer to the database (insert)
 	
