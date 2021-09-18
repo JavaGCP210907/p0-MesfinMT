@@ -27,7 +27,7 @@ public class CustomerDao implements CustomerDaoInterface {
 			
 			List<Customer> customerList = new ArrayList<>();
 			
-			while(rs.next()) { //while there are results in the result set...
+			while(rs.next()) { 
 				
 				Customer e = new Customer(
 						rs.getInt("customer_id"),
@@ -38,32 +38,88 @@ public class CustomerDao implements CustomerDaoInterface {
 						rs.getInt("zipcode")
 						);
 				
-				customerList.add(e); //e is the new Employee object we created above
+				customerList.add(e);
 			}
 			
 			return customerList;
 			
 		} catch (SQLException e) {
-			System.out.println("Something went wrong with your database!"); //generic console message
-			e.printStackTrace(); //stack trace so we actually know what went wrong
+			System.out.println("Something went wrong with your database!"); 
+			e.printStackTrace(); 
 		}
 		
-		return null; //we add this after the try/catch so Java won't yell.
-					 //(Since there is no guarantee the try with resources block will run)
-	}
+		return null; 
+		}
 
 	@Override
 	public List<Customer> getCustomerByName(String name) {
-		// TODO Auto-generated method stub
+		try(Connection conn = ConnectionUtil.getConnection()) {
+			
+			ResultSet rs = null;
+			
+			String sql = "select * from customers where name = ?";
+			PreparedStatement ps = conn.prepareStatement(sql); //prepareStatment() as opposed to createStatment()
+			ps.setString(1, name); //the 1 here is referring to the first parameter (?) found in our SQL String
+			
+			rs = ps.executeQuery();
+			List<Customer> customerList = new ArrayList<>();
+			while(rs.next()) { 
+				Customer c = new Customer(
+					rs.getInt("customer_id"),
+					rs.getString("name"),
+					rs.getString("address"),
+					rs.getString("city"),
+					rs.getString("state"),
+					rs.getInt("zipcode")
+					);
+			
+				customerList.add(c); 
+			}
+			
+			return customerList;
+			
+		} catch (SQLException e) {
+			System.out.println("Something went wrong with your database!"); 
+			e.printStackTrace();
+		}
 		return null;
 	}
+	
 
 	@Override
-	public Customer getCustomerById(int id) {
-		// TODO Auto-generated method stub
+	public List<Customer> getCustomerById(int id) {
+		try(Connection conn = ConnectionUtil.getConnection()) {
+			
+			ResultSet rs = null;
+			
+			String sql = "select * from customers where customer_id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql); //prepareStatment() as opposed to createStatment()
+			ps.setInt(1, id); //the 1 here is referring to the first parameter (?) found in our SQL String
+			
+			rs = ps.executeQuery();
+			List<Customer> customerList = new ArrayList<>();
+			while(rs.next()) { 
+				Customer c = new Customer(
+					rs.getInt("customer_id"),
+					rs.getString("name"),
+					rs.getString("address"),
+					rs.getString("city"),
+					rs.getString("state"),
+					rs.getInt("zipcode")
+					);
+			
+				customerList.add(c); 
+			}
+			
+			return customerList;
+			
+		} catch (SQLException e) {
+			System.out.println("Something went wrong with your database!"); 
+			e.printStackTrace();
+		}
 		return null;
 	}
-
+	
 	@Override
 	public void addCustomer(Customer customer) {
 		try(Connection conn = ConnectionUtil.getConnection()){
@@ -84,7 +140,7 @@ public class CustomerDao implements CustomerDaoInterface {
 			ps.executeUpdate(); //for anything that is NOT a SELECT statement, we use executeUpdate();
 			
 			//send confirmation to the console if successful
-			System.out.println("customer " + customer.getName() + " created. Welcome aboard!");
+			System.out.println("customer " + customer.getName() + " created.");
 			
 		} catch (SQLException e) {
 			System.out.println("add customer failed :(");
@@ -96,14 +152,42 @@ public class CustomerDao implements CustomerDaoInterface {
 
 	@Override
 	public void removeCustomer(int id) {
-		// TODO Auto-generated method stub
-
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "delete from customers where customer_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, id);
+			ps.executeUpdate();
+			
+			System.out.println("Customer ID: " + id+" is deleted.");
+			
+		} catch (SQLException e) {
+			System.out.println("you can't remove Customer ID "+id);
+			e.printStackTrace();
+		}
+		
 	}
-
+	
 	@Override
-	public void updateCustomer(String name, int address) {
-		// TODO Auto-generated method stub
-
+	public void updateCustomer( int id,String address) {
+	try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "update customers set address = ? where customer_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, address);
+			ps.setInt(2, id);
+			
+			ps.executeUpdate();
+			
+			System.out.println("Customer ID "+id + " Address is successfully updated to: " + address);
+			
+		} catch (SQLException e) {
+			System.out.println("You can't update customer : "+id);
+			e.printStackTrace();
+		}
 	}
-
 }

@@ -123,7 +123,7 @@ public class Menu {
 					break;
 				}
 
-				case "1": {
+				case "0": {
 					displayMenu2 = false; //this is how we break out of the while loop, ending the menu display
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
@@ -131,7 +131,7 @@ public class Menu {
 				
 				//this default block will catch anything that doesn't match a menu option
 				default: {
-					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 05, 06, 07, 08 OR 1. TRY AGAIN.");
+					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 05, 06, 07, 08 OR 0. TRY AGAIN.");
 					break;
 				}
 				
@@ -160,29 +160,83 @@ public class Menu {
 				switch(input3) {
 				
 				case "09": {
-					System.out.println("08");
-					break; //we need a break in each case, or else all the other cases will still run
+					List<Customer> customer = cDao.getCustomer();
+					
+					for(Customer cus : customer) {
+						System.out.println(cus);
+					}
+					
+	//				log.info("USER RETRIEVED LIST OF ALL EMPLOYEES");
+					break; 
 				}
 				
+			
 				case "10": {
-					System.out.println("09");
+					System.out.println("Enter customer id to search for?");
+					int idInput = scan.nextInt(); 
+					scan.nextLine(); 
+					List<Customer> customers = cDao.getCustomerById(idInput);
+					
+					for(Customer cus : customers) {
+						System.out.println(cus);
+					}
+					
 					break;
 				}
-				
+						
 				case "11": {
-					System.out.println("10");
+					System.out.println("Enter customer name to search for?");
+					String name = scan.nextLine(); 
+					List<Customer> customers = cDao.getCustomerByName(name);
+					
+					for(Customer cus : customers) {
+						System.out.println(cus);
+					}
+					
 					break;
 				}
 				case "12": {
-					System.out.println("11");
+					System.out.println("Enter Customer Name");
+					String name = scan.nextLine();
+					
+					System.out.println("Enter Address");
+					String address = scan.nextLine();
+					System.out.println("Enter City");
+					String city = scan.nextLine();
+					System.out.println("Enter State");
+					String state = scan.nextLine();
+					System.out.println("Enter Zipcode");
+					int zipcode = scan.nextInt();
+					
+					scan.nextLine();
+					
+					//create a new Employee based on these inputs
+					Customer cus = new Customer(name, address,city,state,zipcode);
+					
+					cDao.addCustomer(cus);
 					break;
 				}
 				case "13": {
-					System.out.println("12");
+					System.out.println("Enter Customer ID to change");
+					int id = scan.nextInt();
+					scan.nextLine();
+					
+					System.out.println("Enter the new customer Address");
+					String address = scan.nextLine();
+					
+					cDao.updateCustomer(id,address);
 					break;
 				}
 				case "14": {
-					System.out.println("13");
+					System.out.println("Enter the id of the Customer to delete");
+					
+					int id = scan.nextInt();
+					scan.nextLine();
+					
+					cDao.removeCustomer(id);
+					
+					log.warn("USER DELETED CUSTOMER ID: " + id);
+					
 					break;
 				}
 
