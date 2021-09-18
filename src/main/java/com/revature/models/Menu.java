@@ -12,8 +12,6 @@ import com.revature.dao.AccountTypeDao;
 import com.revature.dao.CustomerDao;
 import com.revature.dao.TransactionDao;
 
-//This Menu Class will have a method that displays a menu to the user that they can interact with
-//Through this menu, the user can give inputs that will interact with the database
 public class Menu {
 
 	CustomerDao cDao = new CustomerDao(); //so we can use the CustomerDao methods
@@ -22,19 +20,16 @@ public class Menu {
 	TransactionDao tDao = new TransactionDao(); //so we can use the TransactionDao methods
 	Logger log = LogManager.getLogger(Menu.class); //Logger object so that we can implement Logging
 	
-	//All of the manu display options and control flow are contained within this method
 	public void displayMenu() {
 		
-		boolean displayMenu = true; //we're going to use this to toggle whether the menu continues after user input
-		Scanner scan = new Scanner(System.in); //Scanner object to parse user input
+		boolean displayMenu = true; 
+		Scanner scan = new Scanner(System.in);
 		
-		//pretty greeting :)
 		System.out.println("*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*");
 		System.out.println("*  WELCOME TO BANKING OPERATIONS MANAGEMENT SYSTEM!  *");
 		System.out.println("*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*");
 		
 		
-		//display the menu as long as the displayMenu boolean is true
 		while(displayMenu) {
 			
 			System.out.println("---------------------------");
@@ -48,7 +43,6 @@ public class Menu {
 			System.out.println("04 -> TRANSACTION RELATED OPERATIONS");
 			System.out.println("0 -> EXIT THE APPLICATION");
 			
-			//parse user input after they choose a main menu option, and put it in a String variable
 			String input = scan.nextLine();
 			
 			switch(input) {
@@ -63,22 +57,20 @@ public class Menu {
 					System.out.println("06 -> ADD ACCOUNT TYPES");
 					System.out.println("07 -> UPDATE INTEREST RATE");
 					System.out.println("08 -> DELETE ACCOUNT TYPES");
-					System.out.println("1 -> EXIT TO MAIN MENU");
+					System.out.println("0 -> EXIT TO MAIN MENU");
 
 				String inputc = scan.nextLine();
 				
 				switch(inputc) {
 				
 				case "05": {
-					//get the List of AccountType from the DAO layer
+
 					List<AccountType> accounttype = atDao.getAccountTypes();
-					
-					//enhanced for loop to print out the AccountType one by one
+
 					for(AccountType actyp : accounttype) {
 						System.out.println(actyp);
 					}
 					
-	//				log.info("USER RETRIEVED LIST OF ALL EMPLOYEES");
 					break; 
 				}
 				
@@ -88,13 +80,12 @@ public class Menu {
 					
 					System.out.println("Enter Interest Rate");
 					double rate = scan.nextDouble();
-					
 					scan.nextLine();
 					
-					//create a new Employee based on these inputs
 					AccountType actyp = new AccountType(type, rate);
 					
 					atDao.addAccountType(actyp);
+					log.info("USER ADDED NEW ACCOUNT TYPE: "+type);
 					break;
 				}
 				
@@ -107,6 +98,7 @@ public class Menu {
 					scan.nextLine();
 					
 					atDao.updateInterestRate(id, rateInput);
+					log.info("USER UPDATED THE INTEREST RATE OF ACCOUNT TYPE: "+id+" TO "+rateInput);
 					break;
 				}
 
@@ -124,21 +116,20 @@ public class Menu {
 				}
 
 				case "0": {
-					displayMenu2 = false; //this is how we break out of the while loop, ending the menu display
+					displayMenu2 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
 				}
 				
-				//this default block will catch anything that doesn't match a menu option
 				default: {
 					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 05, 06, 07, 08 OR 0. TRY AGAIN.");
 					break;
 				}
 				
-				} //switch statement ends here
-				}//2nd While
+				} //End Nested switch statement
+				} //End nested while
 
-				break; //we need a break in each case, or else all the other cases will still run
+				break;
 			}
 			
 			case "02": {
@@ -151,9 +142,9 @@ public class Menu {
 					System.out.println("10 -> LIST CUSTOMERS BY ID");
 					System.out.println("11 -> LIST CUSTOMERS BY NAME");
 					System.out.println("12 -> ADD CUSTOMER");
-					System.out.println("13 -> UPDATE CUSTOMER  ADDRESS");
+					System.out.println("13 -> UPDATE CUSTOMER ADDRESS");
 					System.out.println("14 -> DELETE CUSTOMER BY ID");
-					System.out.println("1 -> EXIT TO MAIN MENU");
+					System.out.println("0 -> EXIT TO MAIN MENU");
 
 				String input3 = scan.nextLine();
 				
@@ -166,7 +157,6 @@ public class Menu {
 						System.out.println(cus);
 					}
 					
-	//				log.info("USER RETRIEVED LIST OF ALL EMPLOYEES");
 					break; 
 				}
 				
@@ -210,10 +200,10 @@ public class Menu {
 					
 					scan.nextLine();
 					
-					//create a new Employee based on these inputs
 					Customer cus = new Customer(name, address,city,state,zipcode);
 					
 					cDao.addCustomer(cus);
+					log.warn("USER ADDED CUSTOMER WITH NAME: " + name);
 					break;
 				}
 				case "13": {
@@ -225,10 +215,11 @@ public class Menu {
 					String address = scan.nextLine();
 					
 					cDao.updateCustomer(id,address);
+					log.warn("USER UPDATED CUSTOMER ADDRESS TO : " + address+ " FOR CUSTOMER ID: "+id);
 					break;
 				}
 				case "14": {
-					System.out.println("Enter the id of the Customer to delete");
+					System.out.println("Enter the id of the Customer to be delete");
 					
 					int id = scan.nextInt();
 					scan.nextLine();
@@ -240,13 +231,12 @@ public class Menu {
 					break;
 				}
 
-				case "1": {
-					displayMenu3 = false; //this is how we break out of the while loop, ending the menu display
+				case "0": {
+					displayMenu3 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
 				}
 				
-				//this default block will catch anything that doesn't match a menu option
 				default: {
 					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 09, 10, 11, 12, 13, 14 OR 1. TRY AGAIN.");
 					break;
@@ -255,7 +245,7 @@ public class Menu {
 				} //switch statement ends here
 				}//2nd While
 
-				break; //we need a break in each case, or else all the other cases will still run
+				break; 
 			}
 						
 			case "03": {
@@ -268,48 +258,97 @@ public class Menu {
 					System.out.println("16 -> LIST ACCOUNT BY ID");
 					System.out.println("17 -> LIST ACCOUNTS BY NAME");
 					System.out.println("18 -> ADD ACCOUNT");
-					System.out.println("19 -> UPDATE ACCOUNT OWNER'S NAME");
+					System.out.println("19 -> UPDATE ACCOUNT TYPE");
 					System.out.println("20 -> DELETE ACCOUNT BY ID");
-					System.out.println("1 -> EXIT TO MAIN MENU");
+					System.out.println("0 -> EXIT TO MAIN MENU");
 
 				String input3 = scan.nextLine();
 				
 				switch(input3) {
 				
 				case "15": {
-					System.out.println("08");
-					break; //we need a break in each case, or else all the other cases will still run
+					List<Account> account = aDao.getAccount();
+					
+					for(Account acc : account) {
+						System.out.println(acc);
+					}
+					
+					break; 
 				}
 				
 				case "16": {
-					System.out.println("09");
+					System.out.println("Enter account id to search for?");
+					int idInput = scan.nextInt(); 
+					scan.nextLine(); 
+					List<Account> accounts = aDao.getAccountById(idInput);
+					
+					for(Account acc : accounts) {
+						System.out.println(acc);
+					}
+					
 					break;
 				}
 				
 				case "17": {
-					System.out.println("10");
+					System.out.println("Enter account name to search for?");
+					String name = scan.nextLine(); 
+					List<Account> accounts = aDao.getAccountByName(name);
+					
+					for(Account acc : accounts) {
+						System.out.println(acc);
+					}
+					
 					break;
 				}
 				case "18": {
-					System.out.println("11");
+
+					System.out.println("Enter Account Type ID");
+					int accid = scan.nextInt();
+					
+					System.out.println("Enter Customer ID");
+					int cusid = scan.nextInt();
+					
+					scan.nextLine();
+					
+					Account acc = new Account(accid,cusid);
+					
+					aDao.addAccount(acc);
+					log.warn("USER ADDED ACCOUNT ID: " + accid);
 					break;
 				}
 				case "19": {
-					System.out.println("12");
+					System.out.println("Enter Account ID to change");
+					int accountid = scan.nextInt();
+					scan.nextLine();
+					
+					System.out.println("Enter the new Account Type ID");
+					int accounttypeid = scan.nextInt();
+					scan.nextLine();
+					
+					aDao.updateAccount(accountid,accounttypeid);
+					log.warn("USER UPDATED ACCOUNT TYPE ID TO : " + accounttypeid+ " FOR ACCOUNT ID: "+accountid);
 					break;
 				}
 				case "20": {
-					System.out.println("13");
+
+					System.out.println("Enter the the account ID to be delete");
+					
+					int id = scan.nextInt();
+					scan.nextLine();
+					
+					aDao.removeAccount(id);
+					
+					log.warn("USER DELETED ACCOUNT ID: " + id);
+					
 					break;
 				}
 
-				case "1": {
-					displayMenu3 = false; //this is how we break out of the while loop, ending the menu display
+				case "0": {
+					displayMenu3 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
 				}
 				
-				//this default block will catch anything that doesn't match a menu option
 				default: {
 					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 15, 16, 17, 18, 19, 20 OR 1. TRY AGAIN.");
 					break;
@@ -318,7 +357,7 @@ public class Menu {
 				} //switch statement ends here
 				}//2nd While
 
-				break; //we need a break in each case, or else all the other cases will still run
+				break; 
 			}
 			case "04": {
 				boolean displayMenu3 = true; 
@@ -332,46 +371,107 @@ public class Menu {
 					System.out.println("24 -> POST TRANSACTION");
 					System.out.println("25 -> UPDATE TRANSACTION REFERENCE");
 					System.out.println("26 -> DELETE TRANSACTION");
-					System.out.println("1 -> EXIT TO MAIN MENU");
+					System.out.println("0 -> EXIT TO MAIN MENU");
 
 				String input3 = scan.nextLine();
 				
 				switch(input3) {
 				
 				case "21": {
-					System.out.println("08");
-					break; //we need a break in each case, or else all the other cases will still run
+
+					List<Transaction> transaction = tDao.getTransaction();
+					
+					for(Transaction trn : transaction) {
+						System.out.println(trn);
+					}
+					
+					break; 
 				}
 				
 				case "22": {
-					System.out.println("09");
-					break;
-				}
-				
-				case "23": {
-					System.out.println("10");
-					break;
-				}
-				case "24": {
-					System.out.println("11");
-					break;
-				}
-				case "25": {
-					System.out.println("12");
-					break;
-				}
-				case "26": {
-					System.out.println("13");
+
+					System.out.println("Enter transaction id to search for?");
+					int idInput = scan.nextInt(); 
+					scan.nextLine(); 
+					List<Transaction> transaction = tDao.getTransactionByTransactionId(idInput);
+					
+					for(Transaction trn : transaction) {
+						System.out.println(trn);
+					}
+					
 					break;
 				}
 
-				case "1": {
-					displayMenu3 = false; //this is how we break out of the while loop, ending the menu display
+					
+				case "23": {
+
+					System.out.println("Enter account id to search for transactions?");
+					int idInput = scan.nextInt(); 
+					scan.nextLine(); 
+					List<Transaction> transaction = tDao.getTransactionByAccountId(idInput);
+					
+					for(Transaction trn : transaction) {
+						System.out.println(trn);
+					}
+					
+					break;
+				}
+
+				case "24": {
+
+					System.out.println("Enter Account ID");
+					int accid = scan.nextInt();
+					
+					System.out.println("Enter the amount");
+					double amount = scan.nextDouble();
+					
+					System.out.println("Enter the Description/Reference");
+					String desc = scan.nextLine();
+					scan.nextLine();
+					
+					Transaction trn = new Transaction(amount,desc,accid);
+					
+					tDao.addTransaction(trn);
+					log.warn("USER POSTED A TRANSACTION ON ACCOUNT ID: " + accid);
+					break;
+				}
+
+				case "25": {
+
+					System.out.println("Enter Transaction ID to change");
+					int id = scan.nextInt();
+					scan.nextLine();
+					
+					System.out.println("Enter the new Transaction Reference");
+					String desc = scan.nextLine();
+					
+					tDao.updateTransaction(id,desc);
+					log.warn("USER UPDATED TRANSACTION REFERENCE TO : " + desc+ " FOR transaction ID: "+id);
+					break;
+				}
+
+				case "26": {
+
+					System.out.println("Enter the the transaction ID to be delete");
+					
+					int id = scan.nextInt();
+					scan.nextLine();
+					
+					tDao.removeTransaction(id);
+					
+					log.warn("USER DELETED TRANSACTION ID: " + id);
+					
+					break;
+				}
+
+
+					
+				case "0": {
+					displayMenu3 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
 				}
 				
-				//this default block will catch anything that doesn't match a menu option
 				default: {
 					System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 21, 22, 23, 24, 25, 26 OR 1. TRY AGAIN.");
 					break;
@@ -380,16 +480,15 @@ public class Menu {
 				} //switch statement ends here
 				}//2nd While
 
-				break; //we need a break in each case, or else all the other cases will still run
+				break; 
 			}
 
 			case "0": {
-				displayMenu = false; //this is how we break out of the while loop, ending the menu display
+				displayMenu = false;
 				System.out.println("see ya! come again soon.");
 				break;
 			}
 			
-			//this default block will catch anything that doesn't match a menu option
 			default: {
 				System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 01, 02, 03, 04 OR 0. TRY AGAIN.");
 				break;
@@ -400,7 +499,7 @@ public class Menu {
 		} //while loop ends here
 		
 		System.out.println("Thank you for using the Banking Application System");
-		scan.close(); //closes the Scanner, good for memory saving (imagine we have 50000000 open Scanner objects)
+		scan.close(); 
 		
 	}
 	

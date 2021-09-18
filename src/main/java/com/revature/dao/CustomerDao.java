@@ -16,7 +16,7 @@ public class CustomerDao implements CustomerDaoInterface {
 	@Override
 	public List<Customer> getCustomer() {
 
-		try(Connection conn = ConnectionUtil.getConnection()) { //getConnection() comes from our ConnectionUtil Class
+		try(Connection conn = ConnectionUtil.getConnection()) {
 			
 			ResultSet rs = null;
 			
@@ -53,13 +53,14 @@ public class CustomerDao implements CustomerDaoInterface {
 
 	@Override
 	public List<Customer> getCustomerByName(String name) {
+
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			
 			ResultSet rs = null;
 			
 			String sql = "select * from customers where name = ?";
-			PreparedStatement ps = conn.prepareStatement(sql); //prepareStatment() as opposed to createStatment()
-			ps.setString(1, name); //the 1 here is referring to the first parameter (?) found in our SQL String
+			PreparedStatement ps = conn.prepareStatement(sql); 
+			ps.setString(1, name); 
 			
 			rs = ps.executeQuery();
 			List<Customer> customerList = new ArrayList<>();
@@ -88,14 +89,14 @@ public class CustomerDao implements CustomerDaoInterface {
 
 	@Override
 	public List<Customer> getCustomerById(int id) {
+
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			
 			ResultSet rs = null;
 			
 			String sql = "select * from customers where customer_id = ?";
-			PreparedStatement ps = conn.prepareStatement(sql); //prepareStatment() as opposed to createStatment()
-			ps.setInt(1, id); //the 1 here is referring to the first parameter (?) found in our SQL String
-			
+			PreparedStatement ps = conn.prepareStatement(sql); 
+			ps.setInt(1, id); 
 			rs = ps.executeQuery();
 			List<Customer> customerList = new ArrayList<>();
 			while(rs.next()) { 
@@ -122,10 +123,9 @@ public class CustomerDao implements CustomerDaoInterface {
 	
 	@Override
 	public void addCustomer(Customer customer) {
+
 		try(Connection conn = ConnectionUtil.getConnection()){
-			
-			
-			//you can line break a sql statement in Java by concatenation (not the +)
+
 			String sql = "insert into customers (name, address, city, state,zipcode)" +
 						 "values (?, ?, ?, ?,?)";
 			
@@ -137,9 +137,8 @@ public class CustomerDao implements CustomerDaoInterface {
 			ps.setString(4, customer.getState());
 			ps.setInt(5, customer.getZipcode());
 			
-			ps.executeUpdate(); //for anything that is NOT a SELECT statement, we use executeUpdate();
+			ps.executeUpdate(); 
 			
-			//send confirmation to the console if successful
 			System.out.println("customer " + customer.getName() + " created.");
 			
 		} catch (SQLException e) {
@@ -172,7 +171,8 @@ public class CustomerDao implements CustomerDaoInterface {
 	
 	@Override
 	public void updateCustomer( int id,String address) {
-	try(Connection conn = ConnectionUtil.getConnection()){
+
+		try(Connection conn = ConnectionUtil.getConnection()){
 			
 			String sql = "update customers set address = ? where customer_id = ?";
 			

@@ -15,7 +15,7 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 
 	@Override
 	public List<AccountType> getAccountTypes() {
-		try(Connection conn = ConnectionUtil.getConnection()) { //getConnection() comes from our ConnectionUtil Class
+		try(Connection conn = ConnectionUtil.getConnection()) { 
 			
 			ResultSet rs = null;
 			
@@ -26,7 +26,7 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 			
 			List<AccountType> accounttypeList = new ArrayList<>();
 			
-			while(rs.next()) { //while there are results in the result set...
+			while(rs.next()) { 
 				
 				AccountType e = new AccountType(
 						rs.getInt("accounttype_id"),
@@ -34,18 +34,17 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 						rs.getDouble("rate")
 						);
 				
-				accounttypeList.add(e); //e is the new Employee object we created above
+				accounttypeList.add(e); 
 			}
 			
 			return accounttypeList;
 			
 		} catch (SQLException e) {
-			System.out.println("Something went wrong with your database!"); //generic console message
-			e.printStackTrace(); //stack trace so we actually know what went wrong
+			System.out.println("Something went wrong with your database!"); 
+			e.printStackTrace();
 		}
 		
-		return null; //we add this after the try/catch so Java won't yell.
-					 //(Since there is no guarantee the try with resources block will run)
+		return null; 
 	}
 
 	@Override

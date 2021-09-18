@@ -13,7 +13,7 @@ CREATE TABLE customers (
 	state TEXT,
 	zipcode int
 );
-
+alter table CUSTOMERs rename column adress to address;
 --Creating accounttypes table
 CREATE TABLE accounttypes (
 	accounttype_id serial PRIMARY KEY,
@@ -38,4 +38,9 @@ CREATE TABLE transactions (
 	description TEXT,
 	account_id int REFERENCES accounts (account_id) --foreign key: establishes a relationship between the tables
 );
+
+INSERT INTO accounttypes (type,rate) 
+VALUES ('Saving',3.5),
+		('Checking',4.5),
+		('Credit',4.5);
 

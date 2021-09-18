@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.revature.models.Customer;
 
-//Remember, Interfaces provide methods with no body (abstract methods) to be implemented in another class
-//Great for organization, and making sure certain classes implement certain functionality
-//Here, we'll lay out all of the behaviors (methods) that an EmployeeDao should have
 public interface CustomerDaoInterface {
 
 	public List<Customer> getCustomer(); //returns a List of all customers (select *)

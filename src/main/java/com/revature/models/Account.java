@@ -30,6 +30,12 @@ public class Account {
 		this.customer_id = customer_id;
 	}
 
+	public Account(int accounttype_id, int customer_id) {
+		super();
+		this.accounttype_id = accounttype_id;
+		this.customer_id = customer_id;
+	}
+
 	public int getAccount_id() {
 		return account_id;
 	}

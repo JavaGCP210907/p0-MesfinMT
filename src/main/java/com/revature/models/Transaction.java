@@ -4,7 +4,7 @@ public class Transaction {
 
 	private int transaction_id;
 	private String postdate;
-	private String amount;
+	private double amount;
 	private String description;
 	private int account_id;
 	
@@ -13,7 +13,7 @@ public class Transaction {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Transaction(int transaction_id, String postdate, String amount, String description, int account_id) {
+	public Transaction(int transaction_id, String postdate, double amount, String description, int account_id) {
 		super();
 		this.transaction_id = transaction_id;
 		this.postdate = postdate;
@@ -22,9 +22,16 @@ public class Transaction {
 		this.account_id = account_id;
 	}
 
-	public Transaction(String postdate, String amount, String description, int account_id) {
+	public Transaction(String postdate, double amount, String description, int account_id) {
 		super();
 		this.postdate = postdate;
+		this.amount = amount;
+		this.description = description;
+		this.account_id = account_id;
+	}
+
+	public Transaction(double amount, String description, int account_id) {
+		super();
 		this.amount = amount;
 		this.description = description;
 		this.account_id = account_id;
@@ -46,11 +53,11 @@ public class Transaction {
 		this.postdate = postdate;
 	}
 
-	public String getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
@@ -76,48 +83,7 @@ public class Transaction {
 				+ ", description=" + description + ", account_id=" + account_id + "]";
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + account_id;
-		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((postdate == null) ? 0 : postdate.hashCode());
-		result = prime * result + transaction_id;
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Transaction other = (Transaction) obj;
-		if (account_id != other.account_id)
-			return false;
-		if (amount == null) {
-			if (other.amount != null)
-				return false;
-		} else if (!amount.equals(other.amount))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (postdate == null) {
-			if (other.postdate != null)
-				return false;
-		} else if (!postdate.equals(other.postdate))
-			return false;
-		if (transaction_id != other.transaction_id)
-			return false;
-		return true;
-	}
 
 	
 	
