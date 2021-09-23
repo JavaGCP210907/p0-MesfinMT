@@ -48,7 +48,6 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace();
 		}
 		
 		return null; 
@@ -73,7 +72,6 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Add AccountType failed :(");
-			e.printStackTrace();
 		}
 		if (counter == 0) {
 			System.out.println("Add AccountType "+ accounttype.getType()+" failed: " );
@@ -98,11 +96,10 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 			counter=ps.executeUpdate();
 			
 		} catch (SQLException e) {
-			System.out.println("you can't remove Account type "+id);
-			e.printStackTrace();
+			System.out.println("you can't remove Account type "+id+". You have to remove the associated accounts first.");
 		}
 		if (counter == 0) {
-			System.out.println("Delete Account type failed: " + id);
+			System.out.println("Delete Account type "+id +" failed.");
 		}
 		else 
 		{
@@ -129,7 +126,6 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("You can't update Account Type : "+id);
-			e.printStackTrace();
 		}
 	if (counter == 0) {
 		System.out.println("Update Account Type failed: " + id);
@@ -137,7 +133,7 @@ public class AccountTypeDao implements AccountTypeDaoInterface {
 	else 
 	{
 		System.out.println("Account Type "+id + " Interest rate is changed to: " + rate);
-		log.info("USER UPDATED THE INTEREST RATE OF ACCOUNT TYPE: "+id+" TO "+rate);
+		log.warn("USER UPDATED THE INTEREST RATE OF ACCOUNT TYPE: "+id+" TO "+rate);
 	}
 
 	}

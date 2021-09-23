@@ -51,7 +51,6 @@ public class TransactionDao implements TransactionDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace(); 
 		}
 		
 		return null; 
@@ -85,7 +84,6 @@ public class TransactionDao implements TransactionDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -118,7 +116,6 @@ public class TransactionDao implements TransactionDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -151,7 +148,7 @@ public class TransactionDao implements TransactionDaoInterface {
 		else
 		{
 			System.out.println("A new Transaction created for Account ID: " + transaction.getAccount_id());
-			log.warn("USER POSTED A TRANSACTION ON ACCOUNT ID: " + transaction.getAccount_id());
+//			log.info("USER POSTED A TRANSACTION ON ACCOUNT ID: " + transaction.getAccount_id());
 		}
 	
 	}

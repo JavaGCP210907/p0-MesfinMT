@@ -51,7 +51,6 @@ public class AccountDao implements AccountDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace(); 
 		}
 		
 		return null; 
@@ -59,6 +58,7 @@ public class AccountDao implements AccountDaoInterface {
 
 	@Override
 	public List<Account> getAccountByName(String name) {
+
 
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			
@@ -69,6 +69,10 @@ public class AccountDao implements AccountDaoInterface {
 			ps.setString(1, name); 
 			
 			rs = ps.executeQuery();
+			if (rs == null) {
+				System.out.println("An account with the name " + name +" not found.");
+			}
+			
 			List<Account> accountList = new ArrayList<>();
 			while(rs.next()) { 
 				Account eaccount = new Account(
@@ -86,9 +90,10 @@ public class AccountDao implements AccountDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace();
 		}
 		return null;
+	
+
 	}
 
 	@Override
@@ -119,7 +124,6 @@ public class AccountDao implements AccountDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("Something went wrong with your database!"); 
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -150,7 +154,7 @@ public class AccountDao implements AccountDaoInterface {
 		else
 		{
 			System.out.println("A new account created with customer ID: " + account.getCustomer_id());
-			log.warn("USER ADDED ACCOUNT ID: " + account.getAccounttype_id());
+			log.info("USER ADDED ACCOUNT ID: " + account.getAccounttype_id());
 		}
 		
 	}
@@ -171,8 +175,7 @@ public class AccountDao implements AccountDaoInterface {
 			
 			
 		} catch (SQLException e) {
-			System.out.println("you can't remove Account ID "+id);
-			e.printStackTrace();
+			System.out.println("you can't remove Account ID "+id+". You have to remove the associated transactions first.");
 		}
 		if (counter == 0) {
 			System.out.println("Delete Account failed: " + id);
@@ -204,7 +207,6 @@ public class AccountDao implements AccountDaoInterface {
 			
 		} catch (SQLException e) {
 			System.out.println("You can't update Account : "+accountid);
-			e.printStackTrace();
 		}
 		if (counter == 0) {
 			System.out.println("Update Account failed: " + accountid);

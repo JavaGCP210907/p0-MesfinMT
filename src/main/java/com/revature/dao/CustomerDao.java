@@ -158,7 +158,7 @@ public class CustomerDao implements CustomerDaoInterface {
 		else
 		{
 			System.out.println("Customer "+customer.getName() + " successfully added.");
-			log.warn("USER ADDED CUSTOMER WITH NAME: " + customer.getName());
+			log.info("USER ADDED CUSTOMER WITH NAME: " + customer.getName());
 		}
 	}
 	
@@ -179,8 +179,7 @@ public class CustomerDao implements CustomerDaoInterface {
 			counter=ps.executeUpdate();
 			
 		} catch (SQLException e) {
-			System.out.println("you can't remove Customer ID "+id);
-			e.printStackTrace();
+			System.out.println("you can't remove Customer ID "+id+". You have to remove the associated accounts first.");
 		}
 		
 		if (counter == 0) {

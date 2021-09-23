@@ -20,11 +20,21 @@ public class Menu {
 	AccountDao aDao = new AccountDao(); //so we can use the AccountDao methods
 	TransactionDao tDao = new TransactionDao(); //so we can use the TransactionDao methods
 	Logger log = LogManager.getLogger(Menu.class); //Logger object so that we can implement Logging
+
+	//A method used to clear the console screen
+	public void clearScreen() {
+		for (int i=0;i<10;i++)
+		{
+		System.out.print((char)13);
+		}
+	}
 	
-	public void displayMenu()  {
+	public void displayMenu() throws InterruptedException  {
 		
 		boolean displayMenu = true; 
 		Scanner scan = new Scanner(System.in);
+		Menu objectMenu=new Menu();
+		objectMenu.clearScreen();
 		
 		System.out.println("*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*");
 		System.out.println("*  WELCOME TO BANKING OPERATIONS MANAGEMENT SYSTEM!  *");
@@ -43,12 +53,14 @@ public class Menu {
 			System.out.println("03 -> ACCOUNT RELATED OPERATIONS");
 			System.out.println("04 -> TRANSACTION RELATED OPERATIONS");
 			System.out.println("0 -> EXIT THE APPLICATION");
+			objectMenu.clearScreen();
 			
 			String input = scan.nextLine();
 			
 			switch(input) {//Main switch starts here
 			
 			case "01": {
+
 				boolean displayMenu2 = true; 
 				while(displayMenu2) {//Nested while loops starts here
 					System.out.println("----------------------------------");
@@ -58,7 +70,8 @@ public class Menu {
 					System.out.println("06 -> ADD ACCOUNT TYPES");
 					System.out.println("07 -> UPDATE INTEREST RATE");
 					System.out.println("08 -> DELETE ACCOUNT TYPES");
-					System.out.println("0 -> EXIT TO MAIN MENU");
+					System.out.println("0 ->  BACK TO MAIN MENU");
+					objectMenu.clearScreen();
 
 				String inputc = scan.nextLine();
 				
@@ -76,6 +89,7 @@ public class Menu {
 				}
 				
 				case "06": {
+					objectMenu.clearScreen();
 					System.out.println("Please enter Account type");
 					String type = scan.nextLine();
 					
@@ -98,6 +112,7 @@ public class Menu {
 				}
 				
 				case "07": {
+					objectMenu.clearScreen();
 					int id;
 				       do {
 				            System.out.print("Please enter Account Type ID to change: ");
@@ -108,7 +123,6 @@ public class Menu {
 				            id = scan.nextInt();
 				        } while (id < 0);
 					scan.nextLine();
-					
 					//Validate the Interest Rate input. It should be positive number.
 					double rateInput;
 				       do {
@@ -126,6 +140,7 @@ public class Menu {
 				}
 
 				case "08": {
+					objectMenu.clearScreen();
 					int id;
 				       do {
 				            System.out.print("Please enter the id of the Account Type to be deleted: ");
@@ -144,6 +159,8 @@ public class Menu {
 				}
 
 				case "0": {
+					objectMenu.clearScreen();
+
 					displayMenu2 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
@@ -161,6 +178,8 @@ public class Menu {
 			}
 			
 			case "02": {
+				objectMenu.clearScreen();
+
 				boolean displayMenu2 = true; 
 				while(displayMenu2) {//Nested while loops starts here
 					System.out.println("----------------------------------");
@@ -172,13 +191,15 @@ public class Menu {
 					System.out.println("12 -> ADD CUSTOMER");
 					System.out.println("13 -> UPDATE CUSTOMER ADDRESS");
 					System.out.println("14 -> DELETE CUSTOMER BY ID");
-					System.out.println("0 -> EXIT TO MAIN MENU");
+					System.out.println("0 ->  BACK TO MAIN MENU");
+					objectMenu.clearScreen();
 
 				String input3 = scan.nextLine();
 				
 				switch(input3) {//Nested switch starts here
 				
 				case "09": {
+					objectMenu.clearScreen();
 					List<Customer> customer = cDao.getCustomer();
 					
 					for(Customer cus : customer) {
@@ -190,6 +211,7 @@ public class Menu {
 				
 			
 				case "10": {
+					objectMenu.clearScreen();
 					int idInput;
 				       do {
 				            System.out.print("Please enter customer id to search for: ");
@@ -211,6 +233,7 @@ public class Menu {
 				}
 						
 				case "11": {
+					objectMenu.clearScreen();
 					System.out.println("Enter customer name to search for?");
 					String name = scan.nextLine(); 
 					List<Customer> customers = cDao.getCustomerByName(name);
@@ -222,6 +245,7 @@ public class Menu {
 					break;
 				}
 				case "12": {
+					objectMenu.clearScreen();
 					System.out.println("Enter Customer Name");
 					String name = scan.nextLine();
 					
@@ -248,6 +272,7 @@ public class Menu {
 					break;
 				}
 				case "13": {
+					objectMenu.clearScreen();
 					//Validate the customer number input. It should be positive number.
 					int number;
 				       do {
@@ -266,6 +291,7 @@ public class Menu {
 					break;
 				}
 				case "14": {
+					objectMenu.clearScreen();
 					//Validate the customer number input. It should be positive number.
 					int number;
 				       do {
@@ -285,6 +311,7 @@ public class Menu {
 				}
 
 				case "0": {
+					objectMenu.clearScreen();
 					displayMenu2 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
@@ -302,6 +329,8 @@ public class Menu {
 			}
 						
 			case "03": {
+				objectMenu.clearScreen();
+
 				boolean displayMenu2 = true; 
 				while(displayMenu2) {
 					System.out.println("----------------------------------");
@@ -313,13 +342,15 @@ public class Menu {
 					System.out.println("18 -> ADD ACCOUNT");
 					System.out.println("19 -> UPDATE ACCOUNT TYPE");
 					System.out.println("20 -> DELETE ACCOUNT BY ID");
-					System.out.println("0 -> EXIT TO MAIN MENU");
+					System.out.println("0 ->  BACK TO MAIN MENU");
+					objectMenu.clearScreen();
 
 				String input3 = scan.nextLine();
 				
 				switch(input3) {
 				
 				case "15": {
+					objectMenu.clearScreen();
 					List<Account> account = aDao.getAccount();
 					
 					for(Account acc : account) {
@@ -330,6 +361,7 @@ public class Menu {
 				}
 				
 				case "16": {
+					objectMenu.clearScreen();
 					int idInput;
 				       do {
 				            System.out.print("Please enter account id to search for: ");
@@ -351,17 +383,23 @@ public class Menu {
 				}
 				
 				case "17": {
-					System.out.println("Enter account name to search for?");
+					objectMenu.clearScreen();
+					System.out.println("Enter customer name to search for?");
 					String name = scan.nextLine(); 
-					List<Account> accounts = aDao.getAccountByName(name);
+					List<Customer> customers = cDao.getCustomerByName(name);
+					if (customers.isEmpty()) {
+						System.out.println("An account with the name " + name +" not found.");
+					} else {
 					
+					List<Account> accounts = aDao.getAccountByName(name);
 					for(Account acc : accounts) {
 						System.out.println(acc);
 					}
-					
+					}
 					break;
 				}
 				case "18": {
+					objectMenu.clearScreen();
 
 					int accid;
 				       do {
@@ -391,6 +429,7 @@ public class Menu {
 					break;
 				}
 				case "19": {
+					objectMenu.clearScreen();
 					int accountid;
 				       do {
 				            System.out.print("Please enter Account ID to change: ");
@@ -417,6 +456,7 @@ public class Menu {
 					break;
 				}
 				case "20": {
+					objectMenu.clearScreen();
 
 					int id;
 				       do {
@@ -435,6 +475,8 @@ public class Menu {
 				}
 
 				case "0": {
+					objectMenu.clearScreen();
+
 					displayMenu2 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
@@ -451,6 +493,8 @@ public class Menu {
 				break; 
 			}
 			case "04": {
+				objectMenu.clearScreen();
+
 				boolean displayMenu3 = true; 
 				while(displayMenu3) {
 					System.out.println("----------------------------------");
@@ -462,13 +506,15 @@ public class Menu {
 					System.out.println("24 -> POST TRANSACTION");
 					System.out.println("25 -> UPDATE TRANSACTION REFERENCE");
 					System.out.println("26 -> DELETE TRANSACTION");
-					System.out.println("0 -> EXIT TO MAIN MENU");
+					System.out.println("0 ->  BACK TO MAIN MENU");
+					objectMenu.clearScreen();
 
 				String input3 = scan.nextLine();
 				
 				switch(input3) {
 				
 				case "21": {
+					objectMenu.clearScreen();
 
 					List<Transaction> transaction = tDao.getTransaction();
 					
@@ -480,6 +526,7 @@ public class Menu {
 				}
 				
 				case "22": {
+					objectMenu.clearScreen();
 					int idInput;
 				       do {
 				            System.out.print("Please enter transaction id to search for: ");
@@ -502,6 +549,7 @@ public class Menu {
 
 					
 				case "23": {
+					objectMenu.clearScreen();
 					int idInput;
 				       do {
 				            System.out.print("Please enter account id to search for: ");
@@ -523,6 +571,7 @@ public class Menu {
 				}
 
 				case "24": {
+					objectMenu.clearScreen();
 
 					int accid;
 				       do {
@@ -556,6 +605,7 @@ public class Menu {
 				}
 
 				case "25": {
+					objectMenu.clearScreen();
 
 					int id;
 				       do {
@@ -576,6 +626,7 @@ public class Menu {
 				}
 
 				case "26": {
+					objectMenu.clearScreen();
 
 					int id;
 				       do {
@@ -596,6 +647,8 @@ public class Menu {
 
 					
 				case "0": {
+					objectMenu.clearScreen();
+
 					displayMenu3 = false; 
 					System.out.println("EXITED TO MAIN MENU.");
 					break;
@@ -613,21 +666,40 @@ public class Menu {
 			}
 
 			case "0": {
+				objectMenu.clearScreen();
+				objectMenu.clearScreen();
+				objectMenu.clearScreen();
+
+				System.out.println("Y/N -> Are you sure you want to completely exit from the application. Press Y(for yes) or N(for no)");
+				
+				String inputd = scan.nextLine();
+				
+				switch(inputd) {//Nested switch starts here
+				
+				case "Y": {
+
 				displayMenu = false;
-				System.out.println("see ya! come again soon.");
-				break;
+				break;}
+				case "N": {
+
+				break;}
+				
 			}
-			
-			default: {
-				System.out.println("THE INPUT SHOULD BE ONE OF THE FOLLOWING 01, 02, 03, 04 OR 0. TRY AGAIN.");
-				break;
 			}
 			
 			} //switch statement ends here
 			
 		} //while loop ends here
-		
-		System.out.println("Thank you for using the Banking Application System");
+
+		//Clear screen method - used to clear the screen
+		for (int i=0;i<3;i++) {
+		objectMenu.clearScreen();
+		}
+		System.out.println("Thank you for using the Banking Application System!");
+		Thread.sleep(1000);
+		for (int i=0;i<3;i++) {
+		objectMenu.clearScreen();
+		}
 		scan.close(); 
 		
 	}
